@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "544559436807",
+    "firebase_url": "https://codefix-d69c7-default-rtdb.firebaseio.com",
+    "project_id": "codefix-d69c7",
+    "storage_bucket": "codefix-d69c7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:544559436807:android:6cb47988237d992b0e86a2",
+        "android_client_info": {
+          "package_name": "com.example.gloriuspurpose"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7taCwpIdXSgnOlFyzMHGe_hpIyf_Olek"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
