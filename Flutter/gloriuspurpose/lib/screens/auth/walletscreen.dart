@@ -6,16 +6,30 @@ import '../navigationscreen.dart';
 
 class WalletScreen extends StatelessWidget {
 
+  final TextEditingController accountAddressController = TextEditingController();
+  final TextEditingController privateKeyController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+
       backgroundColor: myGreen,
       body: Center(
         child: Column(
+
           children: [
 
+            SizedBox(
+              height: size.height*0.04,
+            ),
+            Container(
+              alignment: Alignment.centerLeft,
+              padding: EdgeInsets.only(left: 10),
+              child: IconButton(onPressed: (){
+                Get.back();
+              },icon: Icon(Icons.arrow_back_ios,color: Colors.white,),),
+            ),
             SizedBox(
               height: 75,
             ),
@@ -36,6 +50,7 @@ class WalletScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: TextField(
+                controller: accountAddressController,
                 decoration: InputDecoration(
                   hintText: "Eg : 0x3EEB1573BEA791Cf799Ff3a528947DD096Ca7E13",
                   border: InputBorder.none,
@@ -57,6 +72,7 @@ class WalletScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: TextField(
+                controller: privateKeyController,
                 decoration: InputDecoration(
                   hintText: "Eg : 0xd512e1763f45976f27f94a4926ba83333bd246a9727423db704496f6bf161f3b",
                   border: InputBorder.none,
@@ -68,6 +84,7 @@ class WalletScreen extends StatelessWidget {
 
             InkWell(
               onTap: (){
+                Get.back();
                 Get.off(()=>NavigationScreen(),transition: Transition.rightToLeft);
               },
               child: Container(
