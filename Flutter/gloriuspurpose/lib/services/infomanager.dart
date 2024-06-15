@@ -7,11 +7,14 @@ class Infomanager
 
   static initializePrefs() async{
     prefs = await SharedPreferences.getInstance();
+    print("Initialized Shared Preferences");
   }
 
-  static storeKeys(String privateKey,String accountAddress) async{
+  static Future<bool> storeKeys(String privateKey,String accountAddress) async{
     await prefs.setString("privateKey", privateKey);
     await prefs.setString("accountAddress", accountAddress);
+    print("Keys Successfully Stored");
+    return true;
   }
 
   static String getPrivateKey() {

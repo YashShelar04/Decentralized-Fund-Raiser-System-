@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:gloriuspurpose/controllers/viewcampaigncontroller.dart';
+import 'package:gloriuspurpose/screens/home/contributionscreen.dart';
 
 import '../../colors.dart';
 
@@ -6,6 +9,8 @@ class ViewCampaign extends StatelessWidget {
   final int index;
 
   ViewCampaign({required this.index});
+
+  final buttonController = Get.put(ViewCampaignButtonController(),);
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +71,7 @@ class ViewCampaign extends StatelessWidget {
               ),
               Container(
                 width: size.width * 0.9,
-                child: Text("Name of the Owner"),
+                child: Text("Name of the Owner",style: TextStyle(fontSize: 17),),
               ),
 
               SizedBox(
@@ -82,7 +87,7 @@ class ViewCampaign extends StatelessWidget {
               ),
               Container(
                 width: size.width * 0.9,
-                child: Text("Aim of the Campaign ETH/Time"),
+                child: Text("Aim of the Campaign ETH/Time",style: TextStyle(fontSize: 17),),
               ),
 
               SizedBox(
@@ -98,7 +103,7 @@ class ViewCampaign extends StatelessWidget {
               ),
               Container(
                 width: size.width * 0.9,
-                child: Text("0x3EEB1573BEA791Cf799Ff3a528947DD096Ca7E13"),
+                child: Text("0x3EEB1573BEA791Cf799Ff3a528947DD096Ca7E13",style: TextStyle(fontSize: 17),),
               ),
 
               SizedBox(
@@ -107,14 +112,59 @@ class ViewCampaign extends StatelessWidget {
 
 
               Container(
+                width: size.width * 0.9,
+                child: Text(
+                  "Enter Amount",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ),
+
+
+              Container(
                 alignment: Alignment.center,
                 width: size.width*0.85,
-                padding: EdgeInsets.all(10),
+                height: 55,
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
-                  color: myGreen,
+                  color: Colors.grey.shade200,
                 ),
-                child: Text("Contribute to the Campaign",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
+                child: TextField(
+                  onTapOutside: (val){
+                    FocusManager.instance.primaryFocus?.unfocus();
+                  },
+                  onChanged: (val){
+                    buttonController.ethers.value = val;
+                  },
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    hintText: "Eg :- 2.74",
+                    border: InputBorder.none,
+                    suffixText: "ETH",
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 35,
+              ),
+
+
+              Obx(
+                  ()=> InkWell(
+                  onTap: buttonController.ethers.value.isNotEmpty ? (){
+                    Get.to(()=> ContributionScreen(),transition: Transition.rightToLeft);
+                  } : null,
+                  child: Container(
+                    alignment: Alignment.center,
+                    width: size.width*0.85,
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: buttonController.ethers.value.isNotEmpty ? myGreen : Colors.grey.shade400,
+                    ),
+                    child: Text("Contribute to the Campaign",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
+                  ),
+                ),
               ),
 
               SizedBox(
