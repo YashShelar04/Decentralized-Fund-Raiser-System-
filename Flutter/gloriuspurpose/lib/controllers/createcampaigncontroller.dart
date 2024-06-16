@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:get/get_rx/get_rx.dart';
 
 class CreateCampaignController extends GetxController
 {
@@ -9,4 +8,13 @@ class CreateCampaignController extends GetxController
   RxList hashTags = [].obs;
   RxBool isAimMoney = true.obs;
   RxString imgPath = "".obs;
+
+  clearAllValues(){
+    aim.value = 0;
+    startDate.value = "";
+    endDate.value = "";
+    hashTags.value = [];
+    isAimMoney.value = true;
+    imgPath.value = "";
+  }
 }
