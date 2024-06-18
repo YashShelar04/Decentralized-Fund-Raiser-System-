@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gloriuspurpose/colors.dart';
 import 'package:gloriuspurpose/screens/auth/signupscreen.dart';
+import 'package:gloriuspurpose/screens/profile/settingscreen.dart';
+import 'package:gloriuspurpose/screens/profile/transactionscreen.dart';
 import 'package:gloriuspurpose/services/localauthservice.dart';
+
+import 'checkbalance.dart';
 
 class Profile extends StatelessWidget {
 
@@ -85,6 +89,9 @@ class Profile extends StatelessWidget {
                 color: myGreen,
                 elevation: 5,
                 child: ListTile(
+                  onTap: (){
+                    Get.to(()=> TransactionScreen(),transition: Transition.rightToLeft);
+                  },
                   textColor: Colors.white,
                   title: Text("My Transaction"),
                 ),
@@ -131,7 +138,11 @@ class Profile extends StatelessWidget {
                     await LocalAuthService.checkForBioMetric();
                     await LocalAuthService.viewAllBiometrics();
                     await LocalAuthService.checkIfDeviceSupported();
-                    await LocalAuthService.authenticateLocalAuth();
+                    final bool didAuthenticate = await LocalAuthService.authenticateLocalAuth();
+                    if(didAuthenticate) {
+                      Get.to(() => CheckBalance(),
+                          transition: Transition.rightToLeft);
+                    }
                   },
                   textColor: Colors.white,
                   title: Text("Check Balance"),
@@ -148,6 +159,9 @@ class Profile extends StatelessWidget {
                 color: myGreen,
                 elevation: 5,
                 child: ListTile(
+                  onTap: (){
+                    Get.to(()=> SettingsScreen(),transition: Transition.rightToLeft);
+                  },
                   textColor: Colors.white,
                   title: Text("Settings"),
                 ),

@@ -155,7 +155,7 @@ class SignUpScreen extends StatelessWidget {
 
               InkWell(
                 onTap: (){
-                  Get.off(()=>WalletScreen(),transition: Transition.rightToLeft);
+                  Get.to(()=>WalletScreen(),transition: Transition.rightToLeft);
                 },
                 child: Container(
                   alignment: Alignment.center,

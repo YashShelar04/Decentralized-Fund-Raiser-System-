@@ -1,18 +1,16 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gloriuspurpose/controllers/bottomnavcontroller.dart';
 import 'package:gloriuspurpose/screens/createcampaign/introcreation.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:gloriuspurpose/colors.dart';
 import 'package:gloriuspurpose/screens/home/homescreen.dart';
 import 'package:gloriuspurpose/screens/profile/profile.dart';
 
-class NavigationScreen extends StatefulWidget {
-  @override
-  State<NavigationScreen> createState() => _NavigationScreenState();
-}
-
-class _NavigationScreenState extends State<NavigationScreen> {
-  int currentIndex = 0;
+class NavigationScreen extends StatelessWidget {
+  final bottomNavController = Get.put(BottomNavController());
 
   List<Widget> pages = [
     HomeScreen(),
@@ -27,92 +25,103 @@ class _NavigationScreenState extends State<NavigationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: myGreen,
-        foregroundColor: Colors.white,
-        title: Text(appTitle),
-        centerTitle: true,
-      ),
-      body: pages[currentIndex],
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: myGreen,
-        tooltip: 'Increment',
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
+    return WillPopScope(
+      onWillPop: ()async{
+        if(bottomNavController.currentIndex.value == 0){
+          print("BackPressed at Home");
+        }else{
+          bottomNavController.currentIndex.value = 0;
+          bottomNavController.appBarTitle.value = "Home";
+        }
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: myGreen,
+          foregroundColor: Colors.white,
+          title: Obx(()=> Text(bottomNavController.appBarTitle.value),),
+          centerTitle: true,
         ),
-        onPressed: startScan,
-        child: const Icon(
-          Icons.qr_code_scanner,
-          size: 28,
-          color: Colors.white,
+        body: Obx(()=> pages[bottomNavController.currentIndex.value]),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: myGreen,
+          tooltip: 'Increment',
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+          onPressed: startScan,
+          child: const Icon(
+            Icons.qr_code_scanner,
+            size: 28,
+            color: Colors.white,
+          ),
         ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        color: myGreen,
-        notchMargin: 5,
-        shadowColor: Colors.transparent,
-        shape: const CircularNotchedRectangle(),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            IconButton(
-              onPressed: () {
-                setState(() {
-                  appTitle = "Home";
-                  currentIndex = 0;
-                });
-              },
-              icon: Icon(
-                Icons.home,
-                color: currentIndex == 0 ? Colors.white : Colors.grey.shade400,
-                size: 30,
+        bottomNavigationBar: BottomAppBar(
+          color: myGreen,
+          notchMargin: 5,
+          shadowColor: Colors.transparent,
+          shape: const CircularNotchedRectangle(),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              IconButton(
+                onPressed: () {
+                  bottomNavController.currentIndex.value = 0;
+                  bottomNavController.appBarTitle.value = "Home";
+                },
+                icon: Obx(
+                  ()=> Icon(
+                    Icons.home,
+                    color: bottomNavController.currentIndex.value == 0 ? Colors.white : Colors.grey.shade400,
+                    size: 30,
+                  ),
+                ),
               ),
-            ),
-            IconButton(
-              onPressed: () {
-                setState(() {
-                  appTitle = "Raise Campaign";
-                  currentIndex = 1;
-                });
-              },
-              icon: Icon(
-                Icons.money,
-                color: currentIndex == 1 ? Colors.white : Colors.grey.shade400,
-                size: 30,
+              IconButton(
+                onPressed: () {
+                  bottomNavController.currentIndex.value = 1;
+                  bottomNavController.appBarTitle.value = "Raise Campaign";
+                },
+                icon: Obx(
+                  ()=> Icon(
+                    Icons.money,
+                    color: bottomNavController.currentIndex.value == 1 ? Colors.white : Colors.grey.shade400,
+                    size: 30,
+                  ),
+                ),
               ),
-            ),
-            SizedBox(
-              width: 50,
-            ),
-            IconButton(
-              onPressed: () {
-                setState(() {
-                  appTitle = "Blogs";
-                  currentIndex = 2;
-                });
-              },
-              icon: Icon(
-                Icons.edit,
-                color: currentIndex == 2 ? Colors.white : Colors.grey.shade400,
-                size: 30,
+              SizedBox(
+                width: 50,
               ),
-            ),
-            IconButton(
-              onPressed: () {
-                setState(() {
-                  appTitle = "Profile";
-                  currentIndex = 3;
-                });
-              },
-              icon: Icon(
-                Icons.person,
-                color: currentIndex == 3 ? Colors.white : Colors.grey.shade400,
-                size: 30,
+              IconButton(
+                onPressed: () {
+                  bottomNavController.currentIndex.value = 2;
+                  bottomNavController.appBarTitle.value = "Blogs";
+                },
+                icon: Obx(
+                  ()=> Icon(
+                    Icons.edit,
+                    color: bottomNavController.currentIndex.value == 2 ? Colors.white : Colors.grey.shade400,
+                    size: 30,
+                  ),
+                ),
               ),
-            ),
-          ],
+              IconButton(
+                onPressed: () {
+                  bottomNavController.currentIndex.value = 3;
+                  bottomNavController.appBarTitle.value = "Profile";
+                },
+                icon: Obx(
+                  ()=> Icon(
+                    Icons.person,
+                    color: bottomNavController.currentIndex.value == 3 ? Colors.white : Colors.grey.shade400,
+                    size: 30,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

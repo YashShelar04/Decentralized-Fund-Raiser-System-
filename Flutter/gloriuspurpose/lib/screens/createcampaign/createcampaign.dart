@@ -1,11 +1,14 @@
 import 'dart:io';
 import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gloriuspurpose/colors.dart';
 import 'package:gloriuspurpose/controllers/createcampaigncontroller.dart';
+import 'package:gloriuspurpose/controllers/loadingcontroller.dart';
+import 'package:gloriuspurpose/models/campaignmodel.dart';
+import 'package:gloriuspurpose/services/firestoreservices/addcampaign.dart';
+import 'package:gloriuspurpose/services/infomanager.dart';
 import 'package:gloriuspurpose/widgets/mytextfield.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -26,12 +29,19 @@ class _CreateCampaignState extends State<CreateCampaign> {
     CreateCampaignController(),
   );
 
+  final loadingController = Get.put(
+    LoadingController(),
+  );
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(icon: Icon(Icons.arrow_back_ios),onPressed: () => Get.back(),),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          onPressed: () => Get.back(),
+        ),
         backgroundColor: myGreen,
         foregroundColor: Colors.white,
         title: Text("Create Campaign"),
@@ -46,15 +56,14 @@ class _CreateCampaignState extends State<CreateCampaign> {
               ),
               InkWell(
                 onTap: () async {
-
-                  final pickedImg = await ImagePicker.platform.getImageFromSource(source: ImageSource.gallery);
-                  if(pickedImg != null){
+                  final pickedImg = await ImagePicker.platform
+                      .getImageFromSource(source: ImageSource.gallery);
+                  if (pickedImg != null) {
                     createCampaignController.imgPath.value = pickedImg.path;
                   }
-
                 },
                 child: Obx(
-                  ()=> Container(
+                  () => Container(
                     alignment: Alignment.center,
                     width: size.width * 0.9,
                     height: size.height * 0.24,
@@ -62,22 +71,27 @@ class _CreateCampaignState extends State<CreateCampaign> {
                       color: Colors.grey.shade200,
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: createCampaignController.imgPath.value.isNotEmpty ? Image.file(File(createCampaignController.imgPath.value),fit: BoxFit.fitWidth,) :Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.image,
-                          color: Colors.grey,
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          "Click here to select Image",
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                      ],
-                    ),
+                    child: createCampaignController.imgPath.value.isNotEmpty
+                        ? Image.file(
+                            File(createCampaignController.imgPath.value),
+                            fit: BoxFit.fitWidth,
+                          )
+                        : Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.image,
+                                color: Colors.grey,
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                "Click here to select Image",
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                            ],
+                          ),
                   ),
                 ),
               ),
@@ -206,7 +220,8 @@ class _CreateCampaignState extends State<CreateCampaign> {
                             thumbColor: myGreen,
                             divisions: 20,
                             label: "${createCampaignController.aim.value} ETH",
-                            value: createCampaignController.aim.value.toDouble(),
+                            value:
+                                createCampaignController.aim.value.toDouble(),
                             min: 0,
                             max: 100,
                             onChanged: (val) {
@@ -448,15 +463,55 @@ class _CreateCampaignState extends State<CreateCampaign> {
                 height: 30,
               ),
 
-              Container(
-                width: size.width*0.85,
-                alignment: Alignment.center,
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: myGreen,
-                  borderRadius: BorderRadius.circular(5),
+              Obx(
+                () => InkWell(
+                  splashFactory: NoSplash.splashFactory,
+                  onTap: () async {
+                    loadingController.isLoading.value = true;
+                    CampaignModel campaign = CampaignModel(
+                        imgUrl: createCampaignController.imgPath.value,
+                        category: "Category",
+                        title: titleController.text,
+                        description: descrController.text,
+                        accountAddress: Infomanager.getAccountAddress(),
+                        isAimAmt: createCampaignController.isAimMoney.value,
+                        aim: createCampaignController.aim.value,
+                        startDate: createCampaignController.startDate.value,
+                        endDate: createCampaignController.endDate.value,
+                        hashTags: createCampaignController.hashTags,
+                        collected: 0,
+                        userUid: "UserId",
+                        campaignId: "Randomly GeneratedId",
+                        isLive: true,
+                        outputImg: [],
+                        outputText: "");
+                    await CampaignServices.addCamapignIntoUsersDoc(campaign);
+                    createCampaignController.clearAllValues();
+                    loadingController.isLoading.value = false;
+                    Get.back();
+                  },
+                  child: Container(
+                    width: size.width * 0.85,
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: loadingController.isLoading.value
+                          ? Colors.grey.shade300
+                          : myGreen,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: loadingController.isLoading.value
+                        ? Center(
+                            child: CircularProgressIndicator(color: myGreen),
+                          )
+                        : Text(
+                            "Create Campaign",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                  ),
                 ),
-                child: Text("Create Campaign",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
               ),
 
               SizedBox(
