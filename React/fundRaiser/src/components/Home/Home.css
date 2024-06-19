@@ -2,6 +2,7 @@
 
 * {
     margin: 0;
+    box-sizing: border-box;
 }
 img, svg {
     user-select: none;
@@ -13,17 +14,18 @@ img, svg {
 }
 
 .top {
-    background-color: white;
+ background-color: white;
     display: block;
     width: 100%;
     position: fixed;
     top: 0px;
-    z-index: 100;
+   z-index: 100;
 }
 .nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    z-index: 200;
 }
 .boxes {
     height: 300px;
@@ -47,6 +49,7 @@ img, svg {
     height: 40px;
     padding: 0px 15px 0px 15px;
     font-size: 2em;
+    margin-right: 300px;
 }
 .btn:hover {
     background-color: black;
@@ -70,11 +73,15 @@ img, svg {
     justify-content: center;
     transform: translateY(100vh);
     animation: slideUp 1s forwards;
+    z-index: 2;
+    flex: 1 1 calc(33.333% - 20px); /* Adjust to fit three boxes per row */
+    max-width: 300px; /* Optional: limit the maximum width */
+    margin: 10px;
 }
 
 .img-box {
-    height: 460px;
-    width: 300px;
+    width: 100%;
+    aspect-ratio: 300 / 460; /* Maintain the aspect ratio */
     background-color: rgb(147, 147, 147);
     border-radius: 40px;
     overflow: hidden;
@@ -92,11 +99,13 @@ img, svg {
     color: rgba(2, 169, 92, 1);
     margin-bottom: 20px;
 }
+
 @keyframes slideUp {
     to {
         transform: translateY(0);
     }
 }
+
 .img-box img {
     height: 100%;
     max-width: min-content;
@@ -104,21 +113,26 @@ img, svg {
 
 .ani-cont {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     margin-top: 20px;
     align-items: center;
     justify-content: space-evenly;
+    overflow-x: auto;
 }
 
 .ellipse {
     position: absolute;
     z-index: -1;
     top: 50%;
+    right: 0%;
+    left: 0%;
+    width: 100%;
+    height: auto; 
 }
 
 .quote {
     display: block;
-    position: absolute;
+    /* position: absolute; */
     text-align: center;
     width: 100vw;
     margin-top: 100px;
@@ -144,4 +158,82 @@ img, svg {
 .about-section p {
     color: #008000;
     font-size: 24px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+    .ani-cont {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+    }
+
+    .dis-box {
+        flex: 0 0 auto; /* Prevent flex items from shrinking */
+        margin-right: 20px; /* Optional: space between boxes */
+    }
+}
+
+@media (max-width: 1147px) {
+    .logo {
+        width: 300px;
+    }
+
+    .btn {
+        font-size: 1.5em;
+    }
+
+    .quote {
+        font-size: 2rem;
+    }
+
+    .about-section h2 {
+        font-size: 2rem;
+    }
+
+    .about-section p {
+        font-size: 18px;
+    }
+
+    .img-box{
+        width: 150px;
+        height:230px;
+        border-radius: 20px;
+    }
+}
+
+@media (max-width: 670px) {
+    .logo {
+        width: 150px;
+    }
+
+    .btn {
+        font-size: 10px;
+        padding: 2px;
+        height: 15px;
+
+    }
+
+    .quote {
+        font-size: 1rem;
+    }
+
+    .about-section h2 {
+        font-size: medium;
+    }
+
+    .about-section p {
+        font-size: 10px;
+    }
+
+    .g-text{
+        font-size: medium;
+    }
+
+
+
+    @media (max-width: 480px) {
+    .dis-box {
+        flex: 1 1 calc(100% - 20px); /* Adjust to fit one box per row */
+    }
+}
 }
