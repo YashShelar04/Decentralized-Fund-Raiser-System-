@@ -38,7 +38,7 @@ class ViewCampaign extends StatelessWidget {
                         image: NetworkImage(
                           campaign.imgUrl.toString(),
                         ),
-                        fit: BoxFit.fill),
+                        fit: BoxFit.cover),
                   ),
                 ),
               ),

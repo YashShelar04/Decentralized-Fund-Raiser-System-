@@ -22,7 +22,13 @@ class HomeScreen extends StatelessWidget {
           );
         }
 
-        List data = snapshot.data!.data()!['Campaigns'];
+        List data = [];
+        try {
+          data = snapshot.data!.data()!['Campaigns'];
+        }catch(e){
+
+          return const Center(child: Text("Sorry No Campaigns are live at this moment",style: TextStyle(fontSize: 20),textAlign: TextAlign.center,),);
+        }
 
         return ListView.builder(
           physics: const BouncingScrollPhysics(),
@@ -49,7 +55,7 @@ class CampaignCard extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Container(
       width: size.width,
-      margin: EdgeInsets.symmetric(horizontal: size.width * 0.04, vertical: 5),
+      margin: EdgeInsets.symmetric(horizontal: size.width * 0.04,),
       child: Card(
         child: Padding(
           padding: EdgeInsets.symmetric(
@@ -73,15 +79,16 @@ class CampaignCard extends StatelessWidget {
                         image: NetworkImage(
                           model.imgUrl.toString(),
                         ),
-                        fit: BoxFit.fill),
+                        fit: BoxFit.cover),
                   ),
                 ),
               ),
 
               //Title
               Theme(
-                data: ThemeData().copyWith(dividerColor: Colors.transparent),
+                data: ThemeData().copyWith(dividerColor: Colors.transparent,splashFactory: NoSplash.splashFactory),
                 child: ExpansionTile(
+
                   title: Text(
                     model.title.toString(),
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),

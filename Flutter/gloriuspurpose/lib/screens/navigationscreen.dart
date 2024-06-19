@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gloriuspurpose/controllers/bottomnavcontroller.dart';
@@ -25,6 +23,8 @@ class NavigationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     return WillPopScope(
       onWillPop: ()async{
         if(bottomNavController.currentIndex.value == 0){
@@ -36,6 +36,44 @@ class NavigationScreen extends StatelessWidget {
         return false;
       },
       child: Scaffold(
+        drawer: Drawer(
+          backgroundColor: myGreen,
+          child: Column(
+            children: [
+
+              Container(
+                height: size.height*0.3,
+                margin: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  image: DecorationImage(image: NetworkImage('https://assets.smfgindiacredit.com/sites/default/files/Options-to-Raise-Funds-For-Business-In-India.jpg?VersionId=5H52e0H6AwpYoaDNZWMzXNlpOnAm.8W2'),fit: BoxFit.cover),
+                ),
+              ),
+              Divider(color: Colors.white,),
+
+              ListTile(
+                iconColor: Colors.white,
+                textColor: Colors.white,
+                leading: Icon(Icons.info),
+                title: Text("About Us"),
+              ),
+
+              ListTile(
+                iconColor: Colors.white,
+                textColor: Colors.white,
+                leading: Icon(Icons.phone),
+                title: Text("Contact Us"),
+              ),
+
+              ListTile(
+                iconColor: Colors.white,
+                textColor: Colors.white,
+                leading: Icon(Icons.web),
+                title: Text("Visit our Website"),
+              ),
+            ],
+          ),
+        ),
         appBar: AppBar(
           backgroundColor: myGreen,
           foregroundColor: Colors.white,
