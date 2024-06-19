@@ -11,9 +11,9 @@ class CampaignServices{
 
   static addCamapignIntoUsersDoc(CampaignModel model)async{
 
-    model.imgUrl = await uploadCampaignImage(model.imgUrl);
     final get = await firestore.doc("UserUid").get();
     List listOfCampaigns = get.exists ? get.data()!["Campaigns"] : [];
+    model.imgUrl = await uploadCampaignImage(model.imgUrl,listOfCampaigns.length.toString(),);
     listOfCampaigns.add(model.toJson());
     await firestore.doc("UserUid").set({
       "Campaigns":listOfCampaigns
@@ -35,11 +35,11 @@ class CampaignServices{
 
   }
 
-  static Future<String> uploadCampaignImage(String? imgPath)async{
+  static Future<String> uploadCampaignImage(String? imgPath,String index)async{
 
     if(imgPath != null && imgPath != "") {
       print("Inside Upload Function");
-      final upload = await storage.child("userid").putFile(File(imgPath),);
+      final upload = await storage.child("UserUid").child(index).putFile(File(imgPath),);
       print("Uploaded");
       final String downloadUrl = await upload.ref.getDownloadURL();
       return downloadUrl;

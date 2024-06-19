@@ -1,9 +1,8 @@
 import 'dart:io';
-import 'dart:math';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gloriuspurpose/colors.dart';
+import 'package:gloriuspurpose/controllers/bottomnavcontroller.dart';
 import 'package:gloriuspurpose/controllers/createcampaigncontroller.dart';
 import 'package:gloriuspurpose/controllers/loadingcontroller.dart';
 import 'package:gloriuspurpose/models/campaignmodel.dart';
@@ -11,6 +10,7 @@ import 'package:gloriuspurpose/services/firestoreservices/addcampaign.dart';
 import 'package:gloriuspurpose/services/infomanager.dart';
 import 'package:gloriuspurpose/widgets/mytextfield.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:uuid/uuid.dart';
 
 class CreateCampaign extends StatefulWidget {
   @override
@@ -22,6 +22,8 @@ class _CreateCampaignState extends State<CreateCampaign> {
   TextEditingController descrController = TextEditingController();
   TextEditingController sDateController = TextEditingController();
   TextEditingController hashTagController = TextEditingController();
+
+  var uuid = Uuid();
   String startDate =
       "${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}";
 
@@ -31,6 +33,10 @@ class _CreateCampaignState extends State<CreateCampaign> {
 
   final loadingController = Get.put(
     LoadingController(),
+  );
+
+  final bottomNavController = Get.put(
+    BottomNavController(),
   );
 
   @override
@@ -70,13 +76,17 @@ class _CreateCampaignState extends State<CreateCampaign> {
                     decoration: BoxDecoration(
                       color: Colors.grey.shade200,
                       borderRadius: BorderRadius.circular(20),
+                      image: createCampaignController.imgPath.value.isNotEmpty
+                          ? DecorationImage(
+                              image: FileImage(
+                                File(createCampaignController.imgPath.value),
+                              ),
+                        fit: BoxFit.cover,
+                            )
+                          : null,
                     ),
-                    child: createCampaignController.imgPath.value.isNotEmpty
-                        ? Image.file(
-                            File(createCampaignController.imgPath.value),
-                            fit: BoxFit.fitWidth,
-                          )
-                        : Column(
+                    child: createCampaignController.imgPath.value.isEmpty
+                        ? Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(
@@ -91,7 +101,8 @@ class _CreateCampaignState extends State<CreateCampaign> {
                                 style: TextStyle(color: Colors.grey),
                               ),
                             ],
-                          ),
+                          )
+                        : null,
                   ),
                 ),
               ),
@@ -397,9 +408,11 @@ class _CreateCampaignState extends State<CreateCampaign> {
                   decoration: InputDecoration(
                     suffixIcon: InkWell(
                       onTap: () {
-                        createCampaignController.hashTags
-                            .add("#${hashTagController.text}");
-                        hashTagController.clear();
+                        if (hashTagController.text.isNotEmpty) {
+                          createCampaignController.hashTags
+                              .add("#${hashTagController.text}");
+                          hashTagController.clear();
+                        }
                       },
                       child: Icon(Icons.add),
                     ),
@@ -466,30 +479,41 @@ class _CreateCampaignState extends State<CreateCampaign> {
               Obx(
                 () => InkWell(
                   splashFactory: NoSplash.splashFactory,
-                  onTap: () async {
-                    loadingController.isLoading.value = true;
-                    CampaignModel campaign = CampaignModel(
-                        imgUrl: createCampaignController.imgPath.value,
-                        category: "Category",
-                        title: titleController.text,
-                        description: descrController.text,
-                        accountAddress: Infomanager.getAccountAddress(),
-                        isAimAmt: createCampaignController.isAimMoney.value,
-                        aim: createCampaignController.aim.value,
-                        startDate: createCampaignController.startDate.value,
-                        endDate: createCampaignController.endDate.value,
-                        hashTags: createCampaignController.hashTags,
-                        collected: 0,
-                        userUid: "UserId",
-                        campaignId: "Randomly GeneratedId",
-                        isLive: true,
-                        outputImg: [],
-                        outputText: "");
-                    await CampaignServices.addCamapignIntoUsersDoc(campaign);
-                    createCampaignController.clearAllValues();
-                    loadingController.isLoading.value = false;
-                    Get.back();
-                  },
+                  onTap: loadingController.isLoading.value
+                      ? () {}
+                      : () async {
+                          loadingController.isLoading.value = true;
+                          CampaignModel campaign = CampaignModel(
+                              imgUrl: createCampaignController.imgPath.value,
+                              category: "Category",
+                              title: titleController.text,
+                              description: descrController.text,
+                              accountAddress: Infomanager.getAccountAddress(),
+                              isAimAmt:
+                                  createCampaignController.isAimMoney.value,
+                              aim: createCampaignController.aim.value,
+                              startDate:
+                                  createCampaignController.startDate.value,
+                              endDate: createCampaignController.endDate.value,
+                              hashTags: createCampaignController.hashTags,
+                              collected: 0,
+                              userUid: "UserId",
+                              campaignId: uuid.v4(),
+                              isLive: true,
+                              outputImg: [],
+                              outputText: "");
+                          loadingController.loadingMessage.value =
+                              "Campaign Model Created";
+                          await CampaignServices.addCamapignIntoUsersDoc(
+                              campaign);
+                          loadingController.loadingMessage.value =
+                              "Added Campaign Successfully";
+                          createCampaignController.clearAllValues();
+                          loadingController.isLoading.value = false;
+                          bottomNavController.currentIndex.value = 0;
+                          bottomNavController.appBarTitle.value = "Home";
+                          Get.back();
+                        },
                   child: Container(
                     width: size.width * 0.85,
                     alignment: Alignment.center,
@@ -512,6 +536,9 @@ class _CreateCampaignState extends State<CreateCampaign> {
                           ),
                   ),
                 ),
+              ),
+              SizedBox(
+                height: 5,
               ),
 
               SizedBox(

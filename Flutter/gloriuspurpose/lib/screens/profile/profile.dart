@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gloriuspurpose/colors.dart';
 import 'package:gloriuspurpose/screens/auth/signupscreen.dart';
+import 'package:gloriuspurpose/screens/profile/myfunds.dart';
 import 'package:gloriuspurpose/screens/profile/settingscreen.dart';
 import 'package:gloriuspurpose/screens/profile/transactionscreen.dart';
 import 'package:gloriuspurpose/services/localauthservice.dart';
@@ -106,6 +107,10 @@ class Profile extends StatelessWidget {
                 color: myGreen,
                 elevation: 5,
                 child: ListTile(
+                  splashColor: Colors.transparent,
+                  onTap: (){
+                    Get.to(()=> MyFunds(),transition: Transition.rightToLeft);
+                  },
                   textColor: Colors.white,
                   title: Text("My Funds"),
                 ),
@@ -138,7 +143,7 @@ class Profile extends StatelessWidget {
                     await LocalAuthService.checkForBioMetric();
                     await LocalAuthService.viewAllBiometrics();
                     await LocalAuthService.checkIfDeviceSupported();
-                    final bool didAuthenticate = await LocalAuthService.authenticateLocalAuth();
+                    final bool didAuthenticate = await LocalAuthService.authenticateLocalAuth("Authentication Required for Checking Balance");
                     if(didAuthenticate) {
                       Get.to(() => CheckBalance(),
                           transition: Transition.rightToLeft);
