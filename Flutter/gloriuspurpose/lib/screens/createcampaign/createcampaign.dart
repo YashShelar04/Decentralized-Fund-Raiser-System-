@@ -7,6 +7,7 @@ import 'package:gloriuspurpose/controllers/createcampaigncontroller.dart';
 import 'package:gloriuspurpose/controllers/loadingcontroller.dart';
 import 'package:gloriuspurpose/models/campaignmodel.dart';
 import 'package:gloriuspurpose/services/firestoreservices/addcampaign.dart';
+import 'package:gloriuspurpose/services/geminiapicall.dart';
 import 'package:gloriuspurpose/services/infomanager.dart';
 import 'package:gloriuspurpose/widgets/mytextfield.dart';
 import 'package:image_picker/image_picker.dart';
@@ -365,25 +366,39 @@ class _CreateCampaignState extends State<CreateCampaign> {
               SizedBox(
                 height: 7,
               ),
-              DropdownMenu(
-                enableFilter: true,
-                onSelected: (val) {
-                  print(val);
-                },
-                hintText: "Select Category",
-                width: size.width * 0.8,
-                dropdownMenuEntries: const [
-                  DropdownMenuEntry(value: 0, label: "Health and Medical"),
-                  DropdownMenuEntry(value: 1, label: "Education"),
-                  DropdownMenuEntry(value: 2, label: "Human Services"),
-                  DropdownMenuEntry(value: 3, label: "Environmental"),
-                  DropdownMenuEntry(value: 4, label: "Arts and Culture"),
-                  DropdownMenuEntry(value: 5, label: "Disaster Relief"),
-                  DropdownMenuEntry(value: 6, label: "Animal Welfare"),
-                  DropdownMenuEntry(value: 7, label: "Senior Services"),
-                  DropdownMenuEntry(value: 8, label: "Military Support"),
-                  DropdownMenuEntry(value: 9, label: "Religious"),
-                ],
+              Obx(
+                    ()=> CheckboxListTile(
+                      contentPadding: EdgeInsets.symmetric(horizontal: size.width*0.1),
+                  activeColor: myGreen,
+                  title: Text("Auto Categorize"),
+                  value: createCampaignController.autoCategorize.value,
+                  onChanged: (val){
+                    createCampaignController.autoCategorize.value = val!;
+                  },
+                ),
+              ),
+              Obx(
+                ()=> DropdownMenu(
+                  enabled: !createCampaignController.autoCategorize.value,
+                  enableFilter: true,
+                  hintText: "Select Category",
+                  onSelected: (val){
+                    updateCategoryVariable(val!);
+                  },
+                  width: size.width * 0.8,
+                  dropdownMenuEntries: const [
+                    DropdownMenuEntry(value: 0, label: "Health and Medical"),
+                    DropdownMenuEntry(value: 1, label: "Education"),
+                    DropdownMenuEntry(value: 2, label: "Human Services"),
+                    DropdownMenuEntry(value: 3, label: "Environmental"),
+                    DropdownMenuEntry(value: 4, label: "Arts and Culture"),
+                    DropdownMenuEntry(value: 5, label: "Disaster Relief"),
+                    DropdownMenuEntry(value: 6, label: "Animal Welfare"),
+                    DropdownMenuEntry(value: 7, label: "Senior Services"),
+                    DropdownMenuEntry(value: 8, label: "Military Support"),
+                    DropdownMenuEntry(value: 9, label: "Religious"),
+                  ],
+                ),
               ),
               SizedBox(
                 height: 20,
@@ -483,9 +498,12 @@ class _CreateCampaignState extends State<CreateCampaign> {
                       ? () {}
                       : () async {
                           loadingController.isLoading.value = true;
+                          if(createCampaignController.autoCategorize.value)  {
+                            createCampaignController.category.value = await GeminiApiCall.autoCategorizeCampaign(titleController.text);
+                          }
                           CampaignModel campaign = CampaignModel(
                               imgUrl: createCampaignController.imgPath.value,
-                              category: "Category",
+                              category: createCampaignController.category.value,
                               title: titleController.text,
                               description: descrController.text,
                               accountAddress: Infomanager.getAccountAddress(),
@@ -549,5 +567,20 @@ class _CreateCampaignState extends State<CreateCampaign> {
         ),
       ),
     );
+  }
+
+  updateCategoryVariable(int val){
+    switch(val){
+      case 1: createCampaignController.category.value = "Education";break;
+      case 2: createCampaignController.category.value = "Human Services";break;
+      case 3: createCampaignController.category.value = "Environmental";break;
+      case 4: createCampaignController.category.value = "Arts and Culture";break;
+      case 5: createCampaignController.category.value = "Disaster Relief";break;
+      case 6: createCampaignController.category.value = "Animal Welfare";break;
+      case 7: createCampaignController.category.value = "Senior Services";break;
+      case 8: createCampaignController.category.value = "Military Support";break;
+      case 9: createCampaignController.category.value = "Religious";break;
+      default: createCampaignController.category.value = "";
+    }
   }
 }

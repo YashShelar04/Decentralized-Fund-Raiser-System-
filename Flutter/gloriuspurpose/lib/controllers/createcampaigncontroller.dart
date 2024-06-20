@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 
 class CreateCampaignController extends GetxController
 {
+  RxBool autoCategorize = false.obs;
+  RxString category = "".obs;
   RxInt aim = 0.obs;
   RxString startDate = "".obs;
   RxString endDate = "".obs;
