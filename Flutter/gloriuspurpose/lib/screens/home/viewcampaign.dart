@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:gloriuspurpose/controllers/viewcampaigncontroller.dart';
 import 'package:gloriuspurpose/models/campaignmodel.dart';
 import 'package:gloriuspurpose/screens/home/contributionscreen.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../colors.dart';
 
@@ -148,6 +149,23 @@ class ViewCampaign extends StatelessWidget {
               ),
               SizedBox(
                 height: 35,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(width: size.width*0.5,child: Text("Scan the QR Code to share this Campaign"),),
+                  SizedBox(
+                    height: 100,
+                    width: 100,
+                    child: QrImageView(
+                      data: campaign.campaignId.toString(),
+                    ),
+                  ),
+                ],
+              ),
+
+              SizedBox(
+                height: 20,
               ),
 
 

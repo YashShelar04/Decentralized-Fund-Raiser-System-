@@ -140,9 +140,6 @@ class Profile extends StatelessWidget {
                 child: ListTile(
                   onTap: ()async{
                     // Check Balance through Local Authentication
-                    await LocalAuthService.checkForBioMetric();
-                    await LocalAuthService.viewAllBiometrics();
-                    await LocalAuthService.checkIfDeviceSupported();
                     final bool didAuthenticate = await LocalAuthService.authenticateLocalAuth("Authentication Required for Checking Balance");
                     if(didAuthenticate) {
                       Get.to(() => CheckBalance(),
@@ -150,7 +147,7 @@ class Profile extends StatelessWidget {
                     }
                   },
                   textColor: Colors.white,
-                  title: Text("Check Balance"),
+                  title: const Text("Check Balance"),
                 ),
               ),
             ),
@@ -168,7 +165,7 @@ class Profile extends StatelessWidget {
                     Get.to(()=> SettingsScreen(),transition: Transition.rightToLeft);
                   },
                   textColor: Colors.white,
-                  title: Text("Settings"),
+                  title: const Text("Settings"),
                 ),
               ),
             ),

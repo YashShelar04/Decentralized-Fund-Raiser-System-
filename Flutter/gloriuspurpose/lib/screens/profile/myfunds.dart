@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../colors.dart';
 import '../../models/campaignmodel.dart';
-import '../home/homescreen.dart';
+import '../../widgets/campaigncard.dart';
 
 class MyFunds extends StatelessWidget {
 
@@ -11,10 +11,9 @@ class MyFunds extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text("My Funds"),
+        title: const Text("My Funds"),
       ),
       body: StreamBuilder(
         stream: firestore.collection("Campaigns").doc("UserUid").snapshots(),
@@ -31,8 +30,7 @@ class MyFunds extends StatelessWidget {
           try {
             data = snapshot.data!.data()!['Campaigns'];
           }catch(e){
-
-            return const Center(child: Text("Sorry No Campaigns are live at this moment",style: TextStyle(fontSize: 20),textAlign: TextAlign.center,),);
+            return const Center(child: Text("You havent raised any Campaigns yet",style: TextStyle(fontSize: 20),textAlign: TextAlign.center,),);
           }
 
           return ListView.builder(
