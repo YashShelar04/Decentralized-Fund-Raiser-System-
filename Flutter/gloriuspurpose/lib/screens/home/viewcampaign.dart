@@ -23,7 +23,7 @@ class ViewCampaign extends StatelessWidget {
         foregroundColor: Colors.white,
         title: Text(campaign.title.toString()),
       ),
-      body: SingleChildScrollView(
+      body: campaign.isLive ? SingleChildScrollView(
         child: Center(
           child: Column(
             children: [
@@ -193,7 +193,41 @@ class ViewCampaign extends StatelessWidget {
             ],
           ),
         ),
+      ) : returnBlogScreen(size),
+    );
+  }
+
+  Widget returnBlogScreen(Size size){
+    return SingleChildScrollView(
+      child: Center(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 15,
+            ),
+            Text("The Campaign has Ended",style: TextStyle(fontSize: size.width*0.055),),
+            SizedBox(
+              height: 15,
+            ),
+            campaign.isAimAmt? Padding(
+              padding: EdgeInsets.symmetric(horizontal: size.width*0.1),
+              child: LinearProgressIndicator(
+                value: (campaign.collected/campaign.aim),
+              ),
+            ) : SizedBox(),
+          ],
+        ),
       ),
     );
+  }
+
+  String returnCampaignStatus(){
+    final resultFigure = campaign.collected/campaign.aim;
+    if(resultFigure>.5 && resultFigure<0.8){
+      return "Campaign was Successful";
+    }else if(resultFigure > 0.8){
+      return "Campaign was a massive Success";
+    }
+    return "Campaign didnot reach its goal";
   }
 }
