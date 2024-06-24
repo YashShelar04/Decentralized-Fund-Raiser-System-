@@ -21,6 +21,9 @@ class MyTextField extends StatelessWidget {
         borderRadius: BorderRadius.circular(5),
       ),
       child: TextField(
+        onTapOutside: (val){
+          FocusManager.instance.primaryFocus?.unfocus();
+        },
         maxLines: null,
         controller: controller,
         decoration: InputDecoration(

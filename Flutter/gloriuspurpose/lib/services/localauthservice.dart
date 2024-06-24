@@ -16,15 +16,17 @@ class LocalAuthService{
     final bool isDeviceSupported = await localAuthentication.isDeviceSupported();
   }
 
-  static authenticateLocalAuth() async{
+  static Future<bool> authenticateLocalAuth(String message) async{
     try {
       final bool didAuthenticate = await localAuthentication.authenticate(
-        localizedReason: 'Please authenticate to show account balance',
+        localizedReason: message,
         options: const AuthenticationOptions(biometricOnly: true),
       );
+      return didAuthenticate;
       // ···
     } catch(e) {
       print(e);
+      return false;
     }
   }
 }

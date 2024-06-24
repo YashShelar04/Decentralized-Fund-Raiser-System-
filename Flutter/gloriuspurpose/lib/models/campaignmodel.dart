@@ -13,29 +13,27 @@ class CampaignModel {
     required this.collected,
     required this.userUid,
     required this.campaignId,
-    required this.donors,
     required this.isLive,
     required this.outputImg,
     required this.outputText,
   });
 
-  final String? imgUrl;
-  final String? category;
-  final String? title;
-  final String? description;
-  final String? accountAddress;
-  final bool? isAimAmt;
-  final int? aim;
-  final String? startDate;
-  final String? endDate;
-  final List<dynamic> hashTags;
-  final int? collected;
-  final String? userUid;
-  final String? campaignId;
-  final List<dynamic> donors;
-  final bool? isLive;
-  final List<dynamic> outputImg;
-  final String? outputText;
+  String? imgUrl;
+  String? category;
+  String? title;
+  String? description;
+  String? accountAddress;
+  bool isAimAmt;
+  int? aim;
+  String? startDate;
+  String? endDate;
+  List<dynamic> hashTags;
+  int? collected;
+  String? userUid;
+  String? campaignId;
+  bool? isLive;
+  List<dynamic> outputImg;
+  String? outputText;
 
   factory CampaignModel.fromJson(Map<String, dynamic> json){
     return CampaignModel(
@@ -52,7 +50,6 @@ class CampaignModel {
       collected: json["collected"],
       userUid: json["userUid"],
       campaignId: json["campaignId"],
-      donors: json["donors"] == null ? [] : List<dynamic>.from(json["donors"]!.map((x) => x)),
       isLive: json["isLive"],
       outputImg: json["outputImg"] == null ? [] : List<dynamic>.from(json["outputImg"]!.map((x) => x)),
       outputText: json["outputText"],
@@ -73,7 +70,6 @@ class CampaignModel {
     "collected": collected,
     "userUid": userUid,
     "campaignId": campaignId,
-    "donors": donors.map((x) => x).toList(),
     "isLive": isLive,
     "outputImg": outputImg.map((x) => x).toList(),
     "outputText": outputText,

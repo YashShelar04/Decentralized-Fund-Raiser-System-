@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:gloriuspurpose/apivariables.dart';
 import 'package:gloriuspurpose/colors.dart';
 import 'package:http/http.dart' as http;
 
