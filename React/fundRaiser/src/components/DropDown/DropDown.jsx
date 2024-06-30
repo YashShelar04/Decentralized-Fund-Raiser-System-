@@ -16,7 +16,7 @@ function DropDown(props) {
     return (
         <>
             <div
-                className="shadow-lg h-10 flex justify-between w-32 rounded-full items-center pl-3 pr-3 cursor-pointer"
+                className="shadow-lg h-10 flex justify-between w-40 rounded-full items-center pl-3 pr-3 cursor-pointer"
                 onClick={toggleDropdown}
             >
                 <div className="font-bold">{selectedOption}</div>

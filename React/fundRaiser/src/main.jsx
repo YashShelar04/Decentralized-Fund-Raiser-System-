@@ -8,18 +8,22 @@ import FundRaise from "/src/components/FundRaise/FundRaise.jsx";
 import Blog from "/src/components/Blog/Blog.jsx";
 import App from './App.jsx'
 import './index.css'
+import ProfileCamp from './components/Profile/ProfileCamp.jsx';
+import ProfileTransaction from './components/Profile/ProfileTransaction.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/'>
-    <Route path='' element={<Home />} />
-    <Route path='dashboard' element ={<Dashboard/>}/>
-    <Route path='profile' element ={<Profile/>}/>
-    <Route path='raisefund' element ={<FundRaise/>}/>
-    <Route path='blogs' element ={<Blog/>}/>
+      <Route path='' element={<Home />} />
+      <Route path='dashboard' element={<Dashboard />} />
+      <Route path='profile' element={<Profile />}/>
+      <Route path='myCampaigns' element={<ProfileCamp />} />
+      <Route path='raisefund' element={<FundRaise />} />
+      <Route path='blogs' element={<Blog />} />
+      <Route path='transactions' element={<ProfileTransaction />} />
     </Route>
   )
-) 
+);
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
    <RouterProvider router = {router} />
