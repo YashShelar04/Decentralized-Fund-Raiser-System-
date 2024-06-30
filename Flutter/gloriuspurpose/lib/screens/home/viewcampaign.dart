@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:get/get.dart';
 import 'package:gloriuspurpose/controllers/viewcampaigncontroller.dart';
 import 'package:gloriuspurpose/models/campaignmodel.dart';
 import 'package:gloriuspurpose/screens/home/contributionscreen.dart';
+import 'package:gloriuspurpose/services/firestoreservices/addcampaign.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../colors.dart';
@@ -16,6 +18,11 @@ class ViewCampaign extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final endYear = int.parse(campaign.endDate.toString().substring(5),);
+    final endDay = int.parse(campaign.endDate.toString().substring(0,2),);
+    final endMonth = int.parse(campaign.endDate.toString().substring(3,4),);
+    final DateTime endTime = DateTime(endYear,endMonth,endDay);
+    print(endTime);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -84,14 +91,21 @@ class ViewCampaign extends StatelessWidget {
               Container(
                 width: size.width * 0.9,
                 child: Text(
-                  "Aim",
+                  campaign.isAimAmt ? "Aim" : "Campaign Ending in",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ),
-              Container(
+              SizedBox(
+                height: 5,
+              ),
+              campaign.isAimAmt ? Container(
                 width: size.width * 0.9,
                 child: Text(campaign.aim.toString(),style: TextStyle(fontSize: 17),),
-              ),
+              ) : TimerCountdown(endTime: DateTime.now().add(Duration(seconds: 10)),onEnd: (){
+                CampaignServices.campaignEnd(campaign.campaignId).then((val){
+                  if(val) Navigator.pop(context);
+                });
+              },),
 
               SizedBox(
                 height: 15,

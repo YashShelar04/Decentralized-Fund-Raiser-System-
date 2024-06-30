@@ -15,9 +15,10 @@ class HomeScreen extends StatelessWidget {
       stream: firestore.collection("Campaigns").doc("allCampaigns").snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Shimmer(loop: 0,
-          direction: ShimmerDirection.btt,
-          child: ListView.builder(itemCount: 10,itemBuilder: (context,index){
+          return Shimmer.fromColors(
+            highlightColor: Colors.grey.shade300,
+            baseColor: Colors.grey.shade200,
+            child: ListView.builder(itemCount: 10,itemBuilder: (context,index){
             return Container(
               width: size.width,
               height: size.height*0.3,
@@ -45,14 +46,14 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
             );
-          }),gradient: LinearGradient(colors: [Colors.grey.shade200,Colors.grey.shade300,Colors.grey.shade400],begin: Alignment.topLeft,end: Alignment.bottomRight),);
+          }),);
         }
 
         List data = [];
         try {
           data = snapshot.data!.data()!['Campaigns'];
         }catch(e){
-
+          print(e);
           return const Center(child: Text("Sorry No Campaigns are live at this moment",style: TextStyle(fontSize: 20),textAlign: TextAlign.center,),);
         }
 

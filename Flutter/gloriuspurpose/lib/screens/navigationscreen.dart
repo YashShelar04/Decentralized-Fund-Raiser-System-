@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gloriuspurpose/controllers/bottomnavcontroller.dart';
+import 'package:gloriuspurpose/screens/blog/writeblogscreen.dart';
 import 'package:gloriuspurpose/screens/createcampaign/introcreation.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:gloriuspurpose/colors.dart';
@@ -13,9 +14,7 @@ class NavigationScreen extends StatelessWidget {
   List<Widget> pages = [
     HomeScreen(),
     IntroCreation(),
-    Container(
-      child: Text("Blog"),
-    ),
+    WriteBlogScreen(),
     Profile(),
   ];
 
