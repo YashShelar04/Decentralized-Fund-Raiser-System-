@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:gloriuspurpose/services/localauthservice.dart';
 
 import '../../colors.dart';
 
@@ -60,30 +62,45 @@ class ContributionScreen extends StatelessWidget {
                 height: size.height*0.25,
               ),
 
-              Container(
-                alignment: Alignment.center,
-                width: size.width*0.85,
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: myGreen,
+              InkWell(
+                splashFactory: NoSplash.splashFactory,
+                onTap: ()async{
+                  final isAuthenticated = await LocalAuthService.authenticateLocalAuth("Authentication Required before transaction");
+                  if(isAuthenticated){
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Authentication Successfull"),),);
+                  }
+                },
+                child: Container(
+                  alignment: Alignment.center,
+                  width: size.width*0.85,
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: myGreen,
+                  ),
+                  child: Text("Confirm",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
                 ),
-                child: Text("Confirm",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
               ),
 
               SizedBox(
                 height: 13,
               ),
 
-              Container(
-                alignment: Alignment.center,
-                width: size.width*0.85,
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  border: Border.all(color: Colors.red,width: 1.5),
+              InkWell(
+                splashFactory: NoSplash.splashFactory,
+                onTap: (){
+                  Get.back();
+                },
+                child: Container(
+                  alignment: Alignment.center,
+                  width: size.width*0.85,
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    border: Border.all(color: Colors.red,width: 1.5),
+                  ),
+                  child: Text("Cancel",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500),),
                 ),
-                child: Text("Cancel",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500),),
               ),
 
               SizedBox(
