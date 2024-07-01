@@ -52,6 +52,9 @@ dependencies:
   shimmer: ^3.0.0
   flutter_rating_bar: ^4.0.1
   flutter_timer_countdown: ^1.0.7
+  flutter_local_notifications: ^17.2.1
+  firebase_messaging: ^15.0.2
+
 
 dev_dependencies:
   flutter_test:

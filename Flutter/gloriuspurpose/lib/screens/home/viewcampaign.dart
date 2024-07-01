@@ -101,7 +101,7 @@ class ViewCampaign extends StatelessWidget {
               campaign.isAimAmt ? Container(
                 width: size.width * 0.9,
                 child: Text(campaign.aim.toString(),style: TextStyle(fontSize: 17),),
-              ) : TimerCountdown(endTime: DateTime.now().add(Duration(seconds: 10)),onEnd: (){
+              ) : TimerCountdown(endTime: endTime,onEnd: (){
                 CampaignServices.campaignEnd(campaign.campaignId).then((val){
                   if(val) Navigator.pop(context);
                 });
@@ -186,7 +186,7 @@ class ViewCampaign extends StatelessWidget {
               Obx(
                   ()=> InkWell(
                   onTap: buttonController.ethers.value.isNotEmpty ? (){
-                    Get.to(()=> ContributionScreen(),transition: Transition.rightToLeft);
+                    Get.to(()=> ContributionScreen(campaign: campaign,),transition: Transition.rightToLeft);
                   } : null,
                   child: Container(
                     alignment: Alignment.center,

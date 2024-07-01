@@ -14,7 +14,7 @@ class CampaignServices{
     print(model.toJson());
 
     final get = await firestore.doc("UserUid").get();
-    List listOfCampaigns = get.exists ? get.data()!["Campaign"] : [];
+    List listOfCampaigns = get.exists ? get.data()!["Campaigns"] : [];
     model.imgUrl = await uploadCampaignImage(model.imgUrl,listOfCampaigns.length.toString(),);
     listOfCampaigns.add(model.toJson());
     await firestore.doc("UserUid").set({
@@ -29,7 +29,7 @@ class CampaignServices{
   static addCamapignIntoGeneralDoc(CampaignModel model)async{
 
     final get = await firestore.doc("allCampaigns").get();
-    List listOfCampaigns = get.exists ? get.data()!["Campaign"] : [];
+    List listOfCampaigns = get.exists ? get.data()!["Campaigns"] : [];
     listOfCampaigns.add(model.toJson());
     await firestore.doc("allCampaigns").set({
       "Campaigns":listOfCampaigns
