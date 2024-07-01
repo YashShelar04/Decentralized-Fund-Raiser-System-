@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gloriuspurpose/colors.dart';
-import 'package:gloriuspurpose/services/infomanager.dart';
+import 'package:gloriuspurpose/services/sharedprefsservice.dart';
 
 import '../navigationscreen.dart';
 
@@ -88,7 +88,7 @@ class WalletScreen extends StatelessWidget {
 
               InkWell(
                 onTap: () async {
-                  final bool keysStored = await Infomanager.storeKeys(privateKeyController.text, accountAddressController.text);
+                  final bool keysStored = await SharedPreferencesServices.storeKeys(privateKeyController.text, accountAddressController.text);
                   if(keysStored) {
                     Get.back();
                     Get.off(() => NavigationScreen(),

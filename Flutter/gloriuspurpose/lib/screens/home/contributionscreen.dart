@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gloriuspurpose/services/localauthservice.dart';
-
+import 'package:gloriuspurpose/services/sharedprefsservice.dart';
 import '../../colors.dart';
+import '../../models/campaignmodel.dart';
+import '../../services/notificationservices/localnotificationservice.dart';
 
 class ContributionScreen extends StatelessWidget {
+
+  final CampaignModel campaign;
+
+  ContributionScreen({required this.campaign});
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +74,9 @@ class ContributionScreen extends StatelessWidget {
                   final isAuthenticated = await LocalAuthService.authenticateLocalAuth("Authentication Required before transaction");
                   if(isAuthenticated){
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Authentication Successfull"),),);
+                    NotificationService.showLocalNotification("Transaction Successful", "Thank You for contribution to the ${campaign.title} Campaign,Your Contribution is Apprciated", "payload");
+                  }else{
+                    print(SharedPreferencesServices.getDeviceToken());
                   }
                 },
                 child: Container(
