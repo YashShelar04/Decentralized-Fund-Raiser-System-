@@ -4,10 +4,7 @@
     margin: 0;
     box-sizing: border-box;
 }
-img, svg {
-    user-select: none;
-    pointer-events: none;
-}
+
 .logo {
     width: 500px;
     margin-top: 3px;
@@ -19,13 +16,13 @@ img, svg {
     width: 100%;
     position: fixed;
     top: 0px;
-   z-index: 100;
+   z-index: 40;
 }
 .nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    z-index: 200;
+    z-index: 40;
 }
 .boxes {
     height: 300px;
@@ -159,6 +156,73 @@ img, svg {
     color: #008000;
     font-size: 24px;
 }
+
+  
+ /* modal css */
+  
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .modal {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    max-width: 500px;
+    width: 100%;
+    position: relative;
+    z-index: 1001;
+  }
+  
+  .close-button {
+    background: none;
+    border: none;
+    font-size: 20px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+  }
+  
+  .submit-button {
+    background: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  /* Blur effect on background content */
+  .content-blur {
+    filter: blur(10px);
+  }
+  
+  
 
 /* Responsive adjustments */
 @media (max-width: 1200px) {

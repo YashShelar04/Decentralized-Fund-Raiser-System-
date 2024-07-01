@@ -15,7 +15,8 @@ function FundRaise() {
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [goalAmount, setGoalAmount] = useState("");
-    const [notifyContributors, setNotifyContributors] = useState("");
+    const [notifyContributors, setNotifyContributors] = useState([]);
+    const [currentEmail, setCurrentEmail] = useState("");
     const [hashTags, setHashTags] = useState([]);
     const [currentHashTag, setCurrentHashTag] = useState("");
     const [image, setImage] = useState(null);
@@ -88,6 +89,18 @@ function FundRaise() {
         setHashTags(hashTags.filter((hashTag) => hashTag !== tag));
     };
 
+    const handleAddEmail = (event) => {
+        event.preventDefault();
+        if (currentEmail.trim() !== "" && !notifyContributors.includes(currentEmail.trim())) {
+            setNotifyContributors([...notifyContributors, currentEmail.trim()]);
+            setCurrentEmail("");
+        }
+    };
+
+    const handleDeleteEmail = (email) => {
+        setNotifyContributors(notifyContributors.filter((notifyEmail) => notifyEmail !== email));
+    };
+
     return (
         <>
             <div className="w-72 mt-2 ml-2">
@@ -95,14 +108,14 @@ function FundRaise() {
             </div>
             <NavBar username="USERNAME" />
 
-            <div className="absolute left-[15%] w-[80%] top-[15%] h-[85%] overflow-y-auto shadow-2xl">
-                <div className="flex-col justify-center items-center overflow-y-auto overflow-x-hidden w-[100%]">
+            <div className="absolute left-[18%] w-[80%] top-[10%] h-[90%] overflow-y-auto shadow-2xl">
+                <div className="flex-col justify-center items-center overflow-x-auto w-[100%]">
                     <div className="text-center text-3xl text-green-600 mt-2 mb-10">
                         Create a Campaign
                     </div>
                     <div className="w-[100%] flex justify-center">
                         <div
-                            className={`w-[80%] h-[300px] bg-[rgba(230,246,239,1)] ml-10 rounded-lg mb-10 flex items-center justify-center border-dashed border-2 ${dragActive ? "border-green-600" : "border-gray-300"}`}
+                            className={`w-[80%] h-[300px] bg-[rgba(230,246,239,1)]  rounded-lg mb-10 flex items-center justify-center border-dashed border-2 ${dragActive ? "border-green-600" : "border-gray-300"}`}
                             onDragEnter={handleDrag}
                             onDragLeave={handleDrag}
                             onDragOver={handleDrag}
@@ -112,10 +125,10 @@ function FundRaise() {
                                 <div className="relative">
                                     <img src={image} alt="Campaign" className="h-[300px] w-auto rounded-lg" />
                                     <button
-                                        className="absolute top-0 right-0 m-2 bg-red-600 text-white p-1 rounded-full"
+                                        className="absolute w-7 h-7 top-0 right-0 m-2 text-white  rounded-full text-center"
                                         onClick={handleDeleteImage}
                                     >
-                                        X
+                                        <img src="/src/images/cross.svg" alt="" className=" decoration-purple-400" />
                                     </button>
                                 </div>
                             ) : (
@@ -129,139 +142,189 @@ function FundRaise() {
                     </div>
                     <form onSubmit={handleSubmit}>
                         <ul className="ml-10 w-full">
-                            <li className="flex w-[70%] mb-10 items-center">
-                                <div className="text-2xl">
-                                    Title:
-                                </div>
-                                <div className="w-[100%]">
-                                    <input
-                                        type="text"
-                                        className="ml-5 rounded-md bg-[rgba(230,246,239,1)] w-[60%] pl-2"
-                                        placeholder="Enter the title"
-                                        value={title}
-                                        onChange={(e) => setTitle(e.target.value)}
-                                    />
-                                </div>
-                            </li>
-                            <li className="flex w-[70%] mb-10 items-center">
-                                <div className="text-2xl">
-                                    Description:
-                                </div>
-                                <div className="ml-5 w-[100%]">
-                                    <textarea
-                                        className="w-[65%] h-[100%] rounded-xl bg-[rgba(230,246,239,1)] p-2"
-                                        placeholder="Enter the description"
-                                        value={description}
-                                        onChange={(e) => setDescription(e.target.value)}
-                                    />
-                                </div>
-                            </li>
+                            <div className="flex w-full">
+                                <li className="flex w-[100%] mb-10 items-start justify-start">
+                                    <div className="flex-col">
+                                        <div className="text-2xl">
+                                            Title:
+                                        </div>
+                                        <div className="w-[100%]">
+                                            <input
+                                                type="text"
+                                                className=" rounded-md bg-[rgba(230,246,239,1)] w-[363px] pl-2 h-[50px]"
+                                                placeholder="Enter the title"
+                                                value={title}
+                                                onChange={(e) => setTitle(e.target.value)}
+                                            />
+                                        </div>
 
-                            <li className="flex w-[70%] mb-10 items-center">
-                                <div className="text-2xl">
-                                    Category:
-                                </div>
-                                <div className="w-[100%] ml-5">
-                                    <DropDown name="Choose" options={options_category} />
-                                </div>
-                            </li>
-                            <li className="flex w-[70%] mb-10 items-center">
-                                <div className="text-2xl">
-                                    Identification:
-                                </div>
-                                <div className="w-[100%] ml-5">
-                                    <DropDown name="Choose" options={options_identify} />
-                                </div>
-                            </li>
+                                        <li className="flex w-[70%] mb-10 items-center mt-10">
+                                            <div className="text-2xl">
+                                                Category:
+                                            </div>
+                                            <div className="w-[100%] ml-5">
+                                                <DropDown name="Choose" options={options_category} />
+                                            </div>
+                                        </li>
+                                    </div>
+                                </li>
+                                <li className="flex-col w-[70%] mb-10 items-start">
+                                    <div className="text-2xl">
+                                        Description:
+                                    </div>
+                                    <div className="w-[100%]">
+                                        <textarea
+                                            className="w-[70%] h-[100px] rounded-xl bg-[rgba(230,246,239,1)] p-2"
+                                            placeholder="Enter the description"
+                                            value={description}
+                                            onChange={(e) => setDescription(e.target.value)}
+                                        />
+                                    </div>
+                                </li>
+                            </div>
 
-                            <li className="flex w-[90%] mb-10 items-center">
-                                <div className="text-2xl">
-                                    Start Date:
+                            <div className="flex  w-full justify-between items-start">
+                                <div className="flex-col w-full">
+                                    <li className="flex-col w-[90%] mb-10 items-center">
+                                        <div className="text-2xl">
+                                            Start Date:
+                                        </div>
+                                        <div>
+                                            <input
+                                                type="date"
+                                                className="rounded-md bg-[rgba(230,246,239,1)] w-[25%] h-[35px] pl-2"
+                                                value={startDate}
+                                                onChange={(e) => setStartDate(e.target.value)}
+                                            />
+                                        </div>
+                                    </li>
+                                    <li className="flex-col w-[90%] mb-10 items-center">
+                                        <div className="text-2xl">
+                                            End Date:
+                                        </div>
+                                        <div>
+                                            <input
+                                                type="date"
+                                                className="rounded-md bg-[rgba(230,246,239,1)] w-[25%] h-[35px] pl-2"
+                                                value={endDate}
+                                                onChange={(e) => setEndDate(e.target.value)}
+                                            />
+                                        </div>
+                                    </li>
                                 </div>
-                                <div>
-                                    <input
-                                        type="date"
-                                        className="ml-5 rounded-md bg-[rgba(230,246,239,1)] w-[90%] pl-2"
-                                        value={startDate}
-                                        onChange={(e) => setStartDate(e.target.value)}
-                                    />
-                                </div>
-                            </li>
-                            <li className="flex w-[90%] mb-10 items-center">
-                                <div className="text-2xl">
-                                    End Date:
-                                </div>
-                                <div>
-                                    <input
-                                        type="date"
-                                        className="ml-5 rounded-md bg-[rgba(230,246,239,1)] w-[90%] pl-2"
-                                        value={endDate}
-                                        onChange={(e) => setEndDate(e.target.value)}
-                                    />
-                                </div>
-                            </li>
-                            <li className="flex w-[90%] mb-10 items-center">
+                                <li className="flex-col w-[70%] mb-15 items-center">
+                                    <div className="text-2xl mb-5">
+                                        Identification:
+                                    </div>
+                                    <div className="w-[100%]">
+                                        <input
+                                            type="text"
+                                            className="rounded-md bg-[rgba(230,246,239,1)] w-[40%] h-[35px] pl-2"
+                                            value={identification}
+                                            onChange={(e) => setIdentification(e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="text-2xl mt-10">
+                                        Upload Documents:
+                                    </div>
+
+                                    <div className="w-[100%]">
+                                        <input
+                                            type="file"
+                                            className="rounded-md bg-[rgba(230,246,239,1)] w-[50%] h-[35px] pl-2"
+
+                                        />
+                                    </div>
+
+                                </li>
+                            </div>
+                            <li className="flex-col w-[90%] mb-10 items-center">
                                 <div className="text-2xl">
                                     Goal Amount:
                                 </div>
                                 <div>
                                     <input
                                         type="text"
-                                        className="ml-5 rounded-md bg-[rgba(230,246,239,1)] w-[90%] pl-2"
+                                        className="rounded-md bg-[rgba(230,246,239,1)] w-[15%] pl-2 h-[35px]"
                                         placeholder="Enter the ETH"
                                         value={goalAmount}
                                         onChange={(e) => setGoalAmount(e.target.value)}
                                     />
                                 </div>
                             </li>
-                            <li className="flex w-[100%] mb-10 items-center">
-                                <div className="text-2xl">
-                                    Notify Contributors:
-                                </div>
-                                <div>
+
+                            <div className="flex justify-between w-full">
+                                <li className="flex-col  mb-10 items-center">
+                                    <div className="text-2xl">
+                                        Notify Contributors:
+                                    </div>
+
                                     <input
                                         type="email"
-                                        className="ml-5 rounded-md bg-[rgba(230,246,239,1)] w-[100%] pl-2"
+                                        className="rounded-md bg-[rgba(230,246,239,1)] pl-2 h-[35px]"
                                         placeholder="Enter the email"
-                                        value={notifyContributors}
-                                        onChange={(e) => setNotifyContributors(e.target.value)}
+                                        value={currentEmail}
+                                        onChange={(e) => setCurrentEmail(e.target.value)}
                                     />
-                                </div>
-                            </li>
-                            <li className="flex w-[100%] mb-10 items-center">
-                                <div className="text-2xl">
-                                    Hash Tags:
-                                </div>
-                                <div className="ml-5 w-[100%] flex flex-wrap items-center">
-                                    
+                                    <button
+                                        type="button"
+                                        className="ml-2 bg-green-500 text-white px-2 py-1 rounded h-[35px]"
+                                        onClick={handleAddEmail}
+                                    >
+                                        Add
+                                    </button>
+                                    <div className="w-auto flex-col flex-wrap items-center max-h-32 overflow-y-auto">
+
+                                        {notifyContributors.map((email, index) => (
+                                            <div key={index} className="flex max-w-80  w-auto justify-between items-center bg-[rgba(230,246,239,1)] rounded-full px-3 py-1 m-1">
+                                                <span>{email}</span>
+                                                <button
+                                                    type="button"
+                                                    className="ml-2 text-green-500"
+                                                    onClick={() => handleDeleteEmail(email)}
+                                                >
+                                                    X
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </li>
+                                <li className="flex-col mb-10 items-center w-[40%]">
+                                    <div className="text-2xl">
+                                        Hash Tags:
+                                    </div>
+
                                     <input
                                         type="text"
-                                        className="ml-2 rounded-md bg-[rgba(230,246,239,1)] w-[10%] pl-2"
+                                        className="rounded-md bg-[rgba(230,246,239,1)] w-[30%] pl-2 h-[35px]"
                                         placeholder="#"
                                         value={currentHashTag}
                                         onChange={(e) => setCurrentHashTag(e.target.value)}
                                     />
                                     <button
                                         type="button"
-                                        className="ml-2 bg-green-500 text-white px-2 py-1 rounded h-[30px]"
+                                        className="ml-2 bg-green-500 text-white px-2 py-1 rounded h-[35px]"
                                         onClick={handleAddHashTag}
                                     >
                                         Add
                                     </button>
-                                    {hashTags.map((tag, index) => (
-                                        <div key={index} className="flex items-center bg-[rgba(230,246,239,1)] rounded-full px-3 py-1 m-1">
-                                            <span>{"#"+tag}</span>
-                                            <button
-                                                type="button"
-                                                className="ml-2 text-green-500"
-                                                onClick={() => handleDeleteHashTag(tag)}
-                                            >
-                                                X
-                                            </button>
-                                        </div>
-                                    ))}
-                                </div>
-                            </li>
+                                    <div className="w-[80%] flex flex-wrap items-center">
+
+                                        {hashTags.map((tag, index) => (
+                                            <div key={index} className="flex max-w-36  justify-between items-center bg-[rgba(230,246,239,1)] rounded-full px-3 py-1 m-1">
+                                                <span>{"#" + tag}</span>
+                                                <button
+                                                    type="button"
+                                                    className="ml-2 text-green-500"
+                                                    onClick={() => handleDeleteHashTag(tag)}
+                                                >
+                                                    X
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </li>
+                            </div>
                         </ul>
                         <div className="flex justify-center mb-10 text-green-500 w-[100%] text-lg">
                             <button type="submit" className="shadow-lg w-42 rounded-full h-[40px] pl-2 pr-2 hover:bg-black duration-200">

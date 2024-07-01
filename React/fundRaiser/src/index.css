@@ -2,3 +2,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+*{
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+
+}
+
