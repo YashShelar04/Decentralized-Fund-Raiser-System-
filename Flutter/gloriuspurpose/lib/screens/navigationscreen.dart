@@ -1,25 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gloriuspurpose/controllers/bottomnavcontroller.dart';
+import 'package:gloriuspurpose/screens/blog/writeblogscreen.dart';
 import 'package:gloriuspurpose/screens/createcampaign/introcreation.dart';
+import 'package:gloriuspurpose/services/notificationservices/localnotificationservice.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:gloriuspurpose/colors.dart';
 import 'package:gloriuspurpose/screens/home/homescreen.dart';
 import 'package:gloriuspurpose/screens/profile/profile.dart';
 
-class NavigationScreen extends StatelessWidget {
+class NavigationScreen extends StatefulWidget {
+  @override
+  State<NavigationScreen> createState() => _NavigationScreenState();
+}
+
+class _NavigationScreenState extends State<NavigationScreen> {
   final bottomNavController = Get.put(BottomNavController());
 
   List<Widget> pages = [
     HomeScreen(),
     IntroCreation(),
-    Container(
-      child: Text("Blog"),
-    ),
+    WriteBlogScreen(),
     Profile(),
   ];
 
   String appTitle = "Home";
+
+  @override
+  void initState() {
+    super.initState();
+    NotificationService.requestPermission();
+  }
 
   @override
   Widget build(BuildContext context) {

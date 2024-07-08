@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:get/get.dart';
 import 'package:gloriuspurpose/controllers/viewcampaigncontroller.dart';
 import 'package:gloriuspurpose/models/campaignmodel.dart';
 import 'package:gloriuspurpose/screens/home/contributionscreen.dart';
+import 'package:gloriuspurpose/services/firestoreservices/addcampaign.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../colors.dart';
@@ -16,6 +18,11 @@ class ViewCampaign extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final endYear = int.parse(campaign.endDate.toString().substring(5),);
+    final endDay = int.parse(campaign.endDate.toString().substring(0,2),);
+    final endMonth = int.parse(campaign.endDate.toString().substring(3,4),);
+    final DateTime endTime = DateTime(endYear,endMonth,endDay);
+    print(endTime);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -23,7 +30,7 @@ class ViewCampaign extends StatelessWidget {
         foregroundColor: Colors.white,
         title: Text(campaign.title.toString()),
       ),
-      body: SingleChildScrollView(
+      body: campaign.isLive ? SingleChildScrollView(
         child: Center(
           child: Column(
             children: [
@@ -84,14 +91,21 @@ class ViewCampaign extends StatelessWidget {
               Container(
                 width: size.width * 0.9,
                 child: Text(
-                  "Aim",
+                  campaign.isAimAmt ? "Aim" : "Campaign Ending in",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ),
-              Container(
+              SizedBox(
+                height: 5,
+              ),
+              campaign.isAimAmt ? Container(
                 width: size.width * 0.9,
                 child: Text(campaign.aim.toString(),style: TextStyle(fontSize: 17),),
-              ),
+              ) : TimerCountdown(endTime: endTime,onEnd: (){
+                CampaignServices.campaignEnd(campaign.campaignId).then((val){
+                  if(val) Navigator.pop(context);
+                });
+              },),
 
               SizedBox(
                 height: 15,
@@ -172,7 +186,7 @@ class ViewCampaign extends StatelessWidget {
               Obx(
                   ()=> InkWell(
                   onTap: buttonController.ethers.value.isNotEmpty ? (){
-                    Get.to(()=> ContributionScreen(),transition: Transition.rightToLeft);
+                    Get.to(()=> ContributionScreen(campaign: campaign,),transition: Transition.rightToLeft);
                   } : null,
                   child: Container(
                     alignment: Alignment.center,
@@ -193,7 +207,41 @@ class ViewCampaign extends StatelessWidget {
             ],
           ),
         ),
+      ) : returnBlogScreen(size),
+    );
+  }
+
+  Widget returnBlogScreen(Size size){
+    return SingleChildScrollView(
+      child: Center(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 15,
+            ),
+            Text("The Campaign has Ended",style: TextStyle(fontSize: size.width*0.055),),
+            SizedBox(
+              height: 15,
+            ),
+            campaign.isAimAmt? Padding(
+              padding: EdgeInsets.symmetric(horizontal: size.width*0.1),
+              child: LinearProgressIndicator(
+                value: (campaign.collected/campaign.aim),
+              ),
+            ) : SizedBox(),
+          ],
+        ),
       ),
     );
+  }
+
+  String returnCampaignStatus(){
+    final resultFigure = campaign.collected/campaign.aim;
+    if(resultFigure>.5 && resultFigure<0.8){
+      return "Campaign was Successful";
+    }else if(resultFigure > 0.8){
+      return "Campaign was a massive Success";
+    }
+    return "Campaign didnot reach its goal";
   }
 }

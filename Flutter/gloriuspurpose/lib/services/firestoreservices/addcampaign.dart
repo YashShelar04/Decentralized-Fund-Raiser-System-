@@ -11,6 +11,8 @@ class CampaignServices{
 
   static addCamapignIntoUsersDoc(CampaignModel model)async{
 
+    print(model.toJson());
+
     final get = await firestore.doc("UserUid").get();
     List listOfCampaigns = get.exists ? get.data()!["Campaigns"] : [];
     model.imgUrl = await uploadCampaignImage(model.imgUrl,listOfCampaigns.length.toString(),);
@@ -38,15 +40,38 @@ class CampaignServices{
   static Future<String> uploadCampaignImage(String? imgPath,String index)async{
 
     if(imgPath != null && imgPath != "") {
-      print("Inside Upload Function");
       final upload = await storage.child("UserUid").child(index).putFile(File(imgPath),);
-      print("Uploaded");
       final String downloadUrl = await upload.ref.getDownloadURL();
       return downloadUrl;
     }
 
     return "Did not Pick Image";
 
+  }
+
+  static Future<bool> campaignEnd(String campaignId)async{
+
+    final get = await firestore.doc("allCampaigns").get();
+    List allCampaigns = get.data()!['Campaigns'];
+    for(Map i in allCampaigns){
+      if(i["campaignId"] == campaignId){
+        i["isLive"] = false;
+        break;
+      }
+    }
+    await firestore.doc("allCampaigns").set({"Campaigns": allCampaigns});
+
+    final get2 = await firestore.doc("UserUid").get();
+    allCampaigns = get2.data()!['Campaigns'];
+    for(Map i in allCampaigns){
+      if(i["campaignId"] == campaignId){
+        i["isLive"] = false;
+        break;
+      }
+    }
+    await firestore.doc("UserUid").set({"Campaigns": allCampaigns});
+
+    return true;
   }
 
 

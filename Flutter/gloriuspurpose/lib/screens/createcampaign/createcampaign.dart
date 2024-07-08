@@ -8,7 +8,7 @@ import 'package:gloriuspurpose/controllers/loadingcontroller.dart';
 import 'package:gloriuspurpose/models/campaignmodel.dart';
 import 'package:gloriuspurpose/services/firestoreservices/addcampaign.dart';
 import 'package:gloriuspurpose/services/geminiapicall.dart';
-import 'package:gloriuspurpose/services/infomanager.dart';
+import 'package:gloriuspurpose/services/sharedprefsservice.dart';
 import 'package:gloriuspurpose/widgets/mytextfield.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
@@ -506,7 +506,7 @@ class _CreateCampaignState extends State<CreateCampaign> {
                               category: createCampaignController.category.value,
                               title: titleController.text,
                               description: descrController.text,
-                              accountAddress: Infomanager.getAccountAddress(),
+                              accountAddress: SharedPreferencesServices.getAccountAddress(),
                               isAimAmt:
                                   createCampaignController.isAimMoney.value,
                               aim: createCampaignController.aim.value,

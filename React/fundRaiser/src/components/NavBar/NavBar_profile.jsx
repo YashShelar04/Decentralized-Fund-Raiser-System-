@@ -16,7 +16,7 @@ function NavBar(props) {
                     <ul>
                         <li>
                             <NavLink
-                                to="/dashboard"
+                                to="/profile"
                                 className={({ isActive }) =>
                                     `flex items-center  py-2 pr-4 pl-3 text-3xl mb-8 mt-5 font-lilita
                                     ${isActive ? "text-white" : "text-green-500/75"}
@@ -25,15 +25,15 @@ function NavBar(props) {
                             >
                                 {({ isActive }) => (
                                     <>
-                                        {isActive && <img src="src/images/right-arrow.svg" className="w-5 h-5 mr-2" alt="" />}
-                                        Dashboard
+                                        {isActive && <img src="/src/images/right-arrow.svg" className="w-5 h-5 mr-2" alt="" />}
+                                        Details
                                     </>
                                 )}
                             </NavLink>
                         </li>
                         <li>
                             <NavLink
-                                to="/profile"
+                                to="/myCampaigns"
                                 className={({ isActive }) =>
                                     `flex items-center  py-2 pr-4 pl-3 text-3xl mb-8 font-lilita
                                     ${isActive ? "text-white" : "text-green-500/75"}
@@ -42,15 +42,15 @@ function NavBar(props) {
                             >
                                 {({ isActive }) => (
                                     <>
-                                        {isActive && <img src="src/images/right-arrow.svg" className="w-5 h-5 mr-2" alt="" />}
-                                        Profile
+                                        {isActive && <img src="/src/images/right-arrow.svg" className="w-5 h-5 mr-2" alt="" />}
+                                        My Campaigns
                                     </>
                                 )}
                             </NavLink>
                         </li>
                         <li>
                             <NavLink
-                                to="/raisefund"
+                                to="/transactions"
                                 className={({ isActive }) =>
                                     `flex items-center  py-2 pr-4 pl-3 text-3xl mb-8 font-lilita
                                      ${isActive ? "text-white" : "text-green-500/75"}
@@ -59,15 +59,15 @@ function NavBar(props) {
                             >
                                 {({ isActive }) => (
                                     <>
-                                        {isActive && <img src="src/images/right-arrow.svg" className="w-5 h-5 mr-2" alt="" />}
-                                        Raise a fund
+                                        {isActive && <img src="/src/images/right-arrow.svg" className="w-5 h-5 mr-2" alt="" />}
+                                        Transactions
                                     </>
                                 )}
                             </NavLink>
                         </li>
                         <li>
                             <NavLink
-                                to="/blogs"
+                                to="/dashboard"
                                 className={({ isActive }) =>
                                     `flex items-center  py-2 pr-4 pl-3 text-3xl mb-8 font-lilita
                                      ${isActive ? "text-white" : "text-green-500/75"}
@@ -76,8 +76,8 @@ function NavBar(props) {
                             >
                                 {({ isActive }) => (
                                     <>
-                                        {isActive && <img src="src/images/right-arrow.svg" className="w-5 h-5 mr-2" alt="" />}
-                                        Blogs
+                                        {isActive && <img src="/src/images/right-arrow.svg" className="w-5 h-5 mr-2" alt="" />}
+                                        Dashboard
                                     </>
                                 )}
                             </NavLink>

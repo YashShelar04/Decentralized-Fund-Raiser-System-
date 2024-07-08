@@ -1,7 +1,10 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
-class Infomanager
+class SharedPreferencesServices
 {
+
+  static final messaging = FirebaseMessaging.instance;
 
   static late SharedPreferences prefs;
 
@@ -25,6 +28,18 @@ class Infomanager
   static String getAccountAddress() {
     String accountAddress = prefs.getString("accountAddress") ?? "";
     return accountAddress;
+  }
+
+  static storeDeviceToken() async{
+    final String deviceToken = await messaging.getToken() ?? "";
+    prefs.setString("deviceToken", deviceToken);
+    print("Device Token Successfully Stored");
+    print("Device Token = $deviceToken");
+  }
+
+  static String getDeviceToken() {
+    final String deviceToken = prefs.getString("deviceToken") ?? "";
+    return deviceToken;
   }
 
 

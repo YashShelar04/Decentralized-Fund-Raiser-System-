@@ -18,22 +18,22 @@ class CampaignModel {
     required this.outputText,
   });
 
-  String? imgUrl;
-  String? category;
-  String? title;
-  String? description;
-  String? accountAddress;
+  String imgUrl;
+  String category;
+  String title;
+  String description;
+  String accountAddress;
   bool isAimAmt;
-  int? aim;
-  String? startDate;
-  String? endDate;
+  int aim;
+  String startDate;
+  String endDate;
   List<dynamic> hashTags;
-  int? collected;
-  String? userUid;
-  String? campaignId;
-  bool? isLive;
+  int collected;
+  String userUid;
+  String campaignId;
+  bool isLive;
   List<dynamic> outputImg;
-  String? outputText;
+  String outputText;
 
   factory CampaignModel.fromJson(Map<String, dynamic> json){
     return CampaignModel(
