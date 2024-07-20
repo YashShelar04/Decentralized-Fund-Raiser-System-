@@ -4,17 +4,12 @@ differently, hashtags for promotion and in-platform blogging system.
 
 ## Table of Contents
 
-- System Design for Website
-- System Design for App
+- System Design for Platform
 - Tech Stack
 
-## System Design for Website
+## System Design for Platform
 
 ![image](https://github.com/user-attachments/assets/c8bc762d-7333-4128-b522-e4352c5a4c66)
-
-## System Design for App
-
-(Add the content for system design for app here.)
 
 ## Tech Stack
 
