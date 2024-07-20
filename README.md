@@ -9,7 +9,7 @@ differently, hashtags for promotion and in-platform blogging system.
 
 ## System Design for Platform
 
-![image](https://github.com/user-attachments/assets/c8bc762d-7333-4128-b522-e4352c5a4c66)
+![image](https://github.com/user-attachments/assets/e025566c-dee9-4737-abc5-a1e0007907ca)
 
 ## Tech Stack
 
